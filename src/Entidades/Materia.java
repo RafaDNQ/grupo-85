@@ -11,8 +11,8 @@ package Entidades;
 public class Materia {
     int idMateria;
     String nombre;
-    int annoMateria;
-    boolean activo;
+    int anno;
+    boolean estado;
 
     public Materia() {
     }
@@ -20,14 +20,14 @@ public class Materia {
     public Materia(int idMateria, String nombre, int annoMateria, boolean activo) {
         this.idMateria = idMateria;
         this.nombre = nombre;
-        this.annoMateria = annoMateria;
-        this.activo = activo;
+        this.anno = annoMateria;
+        this.estado = activo;
     }
 
     public Materia(String nombre, int annoMateria, boolean activo) {
         this.nombre = nombre;
-        this.annoMateria = annoMateria;
-        this.activo = activo;
+        this.anno = annoMateria;
+        this.estado = activo;
     }
 
     public int getIdMateria() {
@@ -46,25 +46,25 @@ public class Materia {
         this.nombre = nombre;
     }
 
-    public int getAnnoMateria() {
-        return annoMateria;
+    public int getAnno() {
+        return anno;
     }
 
-    public void setAnnoMateria(int annoMateria) {
-        this.annoMateria = annoMateria;
+    public void setAnno(int anno) {
+        this.anno = anno;
     }
 
-    public boolean isActivo() {
-        return activo;
+    public boolean isEstado() {
+        return estado;
     }
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
     @Override
     public String toString() {
-        return "Materia{" + "idMateria=" + idMateria + ", nombre=" + nombre + ", annoMateria=" + annoMateria + ", activo=" + activo + '}';
+        return "Materia{" + "idMateria=" + idMateria + ", nombre=" + nombre + ", annoMateria=" + anno + ", activo=" + estado + '}';
     }
     
     

@@ -12,28 +12,41 @@ import java.time.LocalDate;
  */
 public class Alumno {
     int idAlumno;
+    int dni;
     String apellido;
     String nombre;
     LocalDate fechaDeNacimiento;
-    boolean activo;
+    boolean estado;
 
     public Alumno() {
     }
 
-    public Alumno(int idAlumno, String apellido, String nombre, LocalDate fechaDeNacimiento, boolean activo) {
+    public Alumno(int idAlumno,int dni, String apellido, String nombre, LocalDate fechaDeNacimiento, boolean activo) {
         this.idAlumno = idAlumno;
         this.apellido = apellido;
         this.nombre = nombre;
         this.fechaDeNacimiento = fechaDeNacimiento;
-        this.activo = activo;
+        this.estado = activo;
+        this.dni = dni;
     }
 
-    public Alumno(String apellido, String nombre, LocalDate fechaDeNacimiento, boolean activo) {
+    public Alumno(int dni, String apellido, String nombre, LocalDate fechaDeNacimiento, boolean activo) {
         this.apellido = apellido;
         this.nombre = nombre;
         this.fechaDeNacimiento = fechaDeNacimiento;
-        this.activo = activo;
+        this.estado = activo;
+        this.dni = dni;
     }
+
+    public int getDni() {
+        return dni;
+    }
+
+    public void setDni(int dni) {
+        this.dni = dni;
+    }
+    
+    
 
     public int getIdAlumno() {
         return idAlumno;
@@ -67,19 +80,20 @@ public class Alumno {
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
 
-    public boolean isActivo() {
-        return activo;
+    public boolean isEstado() {
+        return estado;
     }
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
     @Override
     public String toString() {
-        return "Alumno{" + "idAlumno=" + idAlumno + ", apellido=" + apellido + ", nombre=" + nombre + ", fechaDeNacimiento=" + fechaDeNacimiento + ", activo=" + activo + '}';
+        return "Alumno{" + "idAlumno=" + idAlumno + ", dni=" + dni + ", apellido=" + apellido + ", nombre=" + nombre + ", fechaDeNacimiento=" + fechaDeNacimiento + ", activo=" + estado + '}';
     }
-    
+
+   
     
     
     
