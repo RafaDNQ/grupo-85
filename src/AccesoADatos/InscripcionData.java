@@ -1,13 +1,197 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package AccesoADatos;
 
-/**
- *
- * @author Usuario
- */
+import Entidades.Inscripcion;
+import Entidades.Materia;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 public class InscripcionData {
-    
+
+    private final Connection con;
+    private MateriaData matData;
+    private AlumnoData aluData;
+
+    public InscripcionData() {
+
+        con = Conexion.getConexion();
+    }
+
+    //-------------------------------------------------------------------------------------------------------------      
+    public void guardarInscripcion(Inscripcion insc) {
+        String sql = "INSERT INTO inscripcion( nota, idAlumno, idMateria)"
+                + " VALUES (?,?,?)";
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+            ps.setDouble(1, insc.getNota());
+            ps.setInt(2, insc.getAlumno().getIdAlumno());
+            ps.setInt(3, insc.getMateria().getIdMateria());
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys();) {
+                if (rs.next()) {
+                    insc.setIdIncripto(rs.getInt(1));
+                    JOptionPane.showMessageDialog(null, "Inscripcion guardada con exito");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se ha podido guardar la Inscripcion ", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } finally {
+            cerrarConexion(con);
+        }
+
+    }
+
+    //-------------------------------------------------------------------------------------------------------------      
+    public List<Inscripcion> obtenerInscripciones() {
+        Inscripcion insc = null;
+        List<Inscripcion> listaInscripciones = new ArrayList<>();
+        String sql = "SELECT * FROM `inscripcion` WHERE 1";
+        try (PreparedStatement stp = con.prepareCall(sql); ResultSet rs = stp.executeQuery();) {
+            while (rs.next()) {
+                insc = new Inscripcion();
+                insc.setIdIncripto(rs.getInt("idInscripto"));
+                insc.setNota(rs.getDouble("nota"));
+                insc.setAlumno(aluData.buscarAlumno(rs.getInt("idAlumno")));
+                insc.setMateria(matData.buscarMateria(rs.getInt("idMateria")));
+                listaInscripciones.add(insc);
+
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } finally {
+            cerrarConexion(con);
+        }
+
+        return listaInscripciones;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------      
+    public List<Inscripcion> obtenerInscripcionesPorAlumno(int idAlumno) {
+
+        List<Inscripcion> listaInscripcionesPorAlumnos = new ArrayList<>();
+        Inscripcion insc = null;
+        List<Inscripcion> listaInscripciones = new ArrayList<>();
+        String sql = "SELECT * FROM `inscripcion` WHERE idAlumno = ? ";
+        try (PreparedStatement stp = con.prepareCall(sql); ResultSet rs = stp.executeQuery();) {
+            stp.setInt(1, idAlumno);
+            while (rs.next()) {
+                insc = new Inscripcion();
+                insc.setIdIncripto(rs.getInt("idInscripto"));
+                insc.setNota(rs.getDouble("nota"));
+                insc.setAlumno(aluData.buscarAlumno(rs.getInt("idAlumno")));
+                insc.setMateria(matData.buscarMateria(rs.getInt("idMateria")));
+                listaInscripciones.add(insc);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } finally {
+            cerrarConexion(con);
+        }
+
+        return listaInscripcionesPorAlumnos;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------      
+    public List<Materia> obtenerMateriasCursadas(int idAlumno) {
+        List<Materia> materiasCursadas = new ArrayList<>();
+        Materia mat = null;
+        String sql = "SELECT inscripcion.idMateria, nombre, anno FROM inscripcion JOIN materia "
+                + "ON(inscripcion.idMateria=materia.idMateria) WHERE inscripcion.idAlumno = ?;";
+        try (PreparedStatement stp = con.prepareCall(sql); ResultSet rs = stp.executeQuery();) {
+            stp.setInt(1, idAlumno);
+            while (rs.next()) {
+                mat.setIdMateria(rs.getInt("idMateria"));
+                mat.setNombre(rs.getString("nombre"));
+                mat.setAnno(rs.getInt("anno"));
+                materiasCursadas.add(mat);
+
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } finally {
+            cerrarConexion(con);
+        }
+
+        return materiasCursadas;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------   
+    public List<Materia> obtenerMateriasNOCursadas(int idAlumno) {
+        List<Materia> listaMateriasNOCursadas = new ArrayList<>();
+        Materia mat = null;
+        String sql = "SELECT M.idMateria, M.nombre, M.anno\n"
+                + "FROM Materia M\n"
+                + "WHERE M.idMateria NOT IN (\n"
+                + "    SELECT I.idMateria\n"
+                + "    FROM Inscripcion I\n"
+                + "    WHERE I.idAlumno = ?\n"
+                + ");";
+        try (PreparedStatement stp = con.prepareCall(sql); ResultSet rs = stp.executeQuery();) {
+            stp.setInt(1, idAlumno);
+            while (rs.next()) {
+                mat.setIdMateria(rs.getInt("idMateria"));
+                mat.setNombre(rs.getString("nombre"));
+                mat.setAnno(rs.getInt("anno"));
+                listaMateriasNOCursadas.add(mat);
+
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } finally {
+            cerrarConexion(con);
+        }
+
+        return listaMateriasNOCursadas;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------     
+    public void borrarInscripcionMateriaAlumno(int idInscripto) {
+
+    }
+
+//-------------------------------------------------------------------------------------------------------------     
+    public void actualizarNota(int idInscripto, int nota) {
+
+    }
+
+//-------------------------------------------------------------------------------------------------------------     
+    public List<Alumno> obtenerAlumnoXMateriaMateria(int idMateria) {
+        List<Alumno> listaAlumnoXMateriaMateria = new ArrayList<>();
+
+        return listaAlumnoXMateriaMateria;
+    }
+
+//------------------------------------------------------------------------------------------------------------- 
+    private void cerrarConexion(Connection con) {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al cerror la conexion" + ex.getMessage(), "Error Conexion", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            } finally {
+                cerrarConexion(con);
+            }
+        }
+
+    }
+
 }

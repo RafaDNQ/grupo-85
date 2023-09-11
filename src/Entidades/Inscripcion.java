@@ -1,15 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Entidades;
 
-/**
- *
- * @author Usuario
- */
 public class Inscripcion {
-    int idIncripcion;
+    int idInscripto;
     Alumno alumno;
     Materia materia;
     double nota;
@@ -22,8 +15,8 @@ public class Inscripcion {
     }
     
 
-    public Inscripcion(int idIncripcion, Alumno alumno, Materia materia, double nota) {
-        this.idIncripcion = idIncripcion;
+    public Inscripcion(int idInscripto, Alumno alumno, Materia materia, double nota) {
+        this.idInscripto = idInscripto;
         this.alumno = alumno;
         this.materia = materia;
         this.nota = nota;
@@ -35,12 +28,12 @@ public class Inscripcion {
         this.nota = nota;
     }
 
-    public int getIdIncripcion() {
-        return idIncripcion;
+    public int getIdInscripto() {
+        return idInscripto;
     }
 
-    public void setIdIncripcion(int idIncripcion) {
-        this.idIncripcion = idIncripcion;
+    public void setIdIncripto(int idInscripto) {
+        this.idInscripto = idInscripto;
     }
 
     public Alumno getAlumno() {
@@ -67,6 +60,10 @@ public class Inscripcion {
         this.nota = nota;
     }
     
-
-    
+ @Override
+    public String toString() {
+        //return "Inscripcion{" + "idInscripcion=" + idInscripcion + ", alumno=" + alumno + ", materia=" + materia + ", nota=" + nota + '}';
+        String insc = idInscripto + " " + alumno.getApellido() + ", " + alumno.getNombre() + " " + materia.getNombre();
+        return insc;    
+    }
 }
