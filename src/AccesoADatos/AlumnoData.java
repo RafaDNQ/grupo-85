@@ -25,8 +25,7 @@ public class AlumnoData {
         String sql = "INSERT INTO alumno(dni,apellido,nombre,fechaNac,estado)"
                 + "VALUE (?, ?, ?, ?, ?)";
 
-        try {
-            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
             ps.setInt(1, alumno.getDni());
             ps.setString(2, alumno.getApellido());
             ps.setString(3, alumno.getNombre());
@@ -34,28 +33,27 @@ public class AlumnoData {
             ps.setBoolean(5, alumno.isEstado());
             ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
+            try (ResultSet rs = ps.getGeneratedKeys();) {
+                if (rs.next()) {
 
-                alumno.setIdAlumno(rs.getInt(1));
-                JOptionPane.showMessageDialog(null, "Alumno Guardado");
+                    alumno.setIdAlumno(rs.getInt(1));
+                    JOptionPane.showMessageDialog(null, "Alumno Guardado");
+                }
             }
-            ps.close();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
 
+        } finally {
+            cerrarConexion(con);
         }
     }
 
     public Alumno buscarAlumno(int id) {
         String sql = "SELECT dni, apellido,nombre,fechaNacimiento FROM alumno WHERE idAlumno = ? AND estado = 1";
         Alumno alumno = null;
-        try {
-            PreparedStatement ps = con.prepareStatement(sql);
+        try (PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
             ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-
             if (rs.next()) {
 
                 alumno = new Alumno();
@@ -70,21 +68,21 @@ public class AlumnoData {
             } else {
                 JOptionPane.showMessageDialog(null, "No existe ese Alumno");
             }
-            ps.close();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
+        } finally {
+            cerrarConexion(con);
         }
         return alumno;
     }
 
-    public Alumno buscarAlumnoDni(int dni) {
+    public Alumno buscarAlumnoDNI(int dni) {
         String sql = "SELECT dni, apellido,nombre,fechaNacimiento FROM alumno WHERE dni = ? AND estado = 1";
         Alumno alumno = null;
-        try {
-            PreparedStatement ps = con.prepareStatement(sql);
+        try (PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
+
             ps.setInt(1, dni);
-            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
 
@@ -100,10 +98,11 @@ public class AlumnoData {
             } else {
                 JOptionPane.showMessageDialog(null, "No existe ese Alumno");
             }
-            ps.close();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
+        } finally {
+            cerrarConexion(con);
         }
         return alumno;
     }
@@ -128,7 +127,7 @@ public class AlumnoData {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
             ex.printStackTrace();
         } finally {
-            con.close();
+            cerrarConexion(con);
         }
         return listaAlumno;
     }
@@ -137,8 +136,7 @@ public class AlumnoData {
         String sql = "UPDATE alumno SET dni =?, apellido=?, nombre=?, fechaNacimiento=?"
                 + "WHERE idAlumno=?";
 
-        try {
-            PreparedStatement ps = con.prepareStatement(sql);
+        try(PreparedStatement ps = con.prepareStatement(sql);) {
             ps.setInt(1, alumno.getDni());
             ps.setString(2, alumno.getApellido());
             ps.setString(3, alumno.getNombre());
@@ -153,14 +151,16 @@ public class AlumnoData {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
+        }finally{
+            cerrarConexion(con);
         }
     }
 
     public void eliminarAlumno(int id) {
         String sql = "UPDATE alumno SET estado = 0 WHERE idAlumno = ?";
 
-        try {
-            PreparedStatement ps = con.prepareStatement(sql);
+        try (PreparedStatement ps = con.prepareStatement(sql);) {
+
             ps.setInt(1, id);
             int exito = ps.executeUpdate();
             if (exito == 1) {
@@ -169,7 +169,21 @@ public class AlumnoData {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
+        } finally {
+            cerrarConexion(con);
         }
+    }
+
+    private void cerrarConexion(Connection con) {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al cerror la conexion" + ex.getMessage(), "Error Conexion", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        }
+
     }
 
 }
