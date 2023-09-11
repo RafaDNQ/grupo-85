@@ -1,22 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Entidades;
 
 import java.time.LocalDate;
 
-/**
- *
- * @author Usuario
- */
 public class Alumno {
-    int idAlumno;
-    int dni;
-    String apellido;
-    String nombre;
-    LocalDate fechaDeNacimiento;
-    boolean estado;
+    private int idAlumno;
+    private int dni;
+    private String apellido;
+    private String nombre;
+    private LocalDate fechaDeNacimiento;
+    private boolean estado;
 
     public Alumno() {
     }
@@ -44,9 +37,7 @@ public class Alumno {
 
     public void setDni(int dni) {
         this.dni = dni;
-    }
-    
-    
+    }   
 
     public int getIdAlumno() {
         return idAlumno;

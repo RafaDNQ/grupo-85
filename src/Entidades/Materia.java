@@ -1,18 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Entidades;
 
-/**
- *
- * @author Usuario
- */
 public class Materia {
-    int idMateria;
-    String nombre;
-    int anno;
-    boolean estado;
+    private int idMateria;
+    private String nombre;
+    private int anno;
+    private boolean estado;
 
     public Materia() {
     }
@@ -65,11 +58,6 @@ public class Materia {
     @Override
     public String toString() {
         return "Materia{" + "idMateria=" + idMateria + ", nombre=" + nombre + ", annoMateria=" + anno + ", activo=" + estado + '}';
-    }
-    
-    
-    
-    
-    
+    }   
     
 }

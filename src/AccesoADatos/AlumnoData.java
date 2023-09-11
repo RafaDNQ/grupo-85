@@ -5,9 +5,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import java.sql.Statement;
 import Entidades.Alumno;
@@ -81,7 +78,7 @@ public class AlumnoData {
         return alumno;
     }
 
-    public Alumno buscarAlumnoDNI(int dni) {
+    public Alumno buscarAlumnoDni(int dni) {
         String sql = "SELECT dni, apellido,nombre,fechaNacimiento FROM alumno WHERE dni = ? AND estado = 1";
         Alumno alumno = null;
         try {
