@@ -28,7 +28,7 @@ public class MateriaData {
     con = Conexion.getConexion();
     
     }
-    
+    //------------------------------------------------------------------------------------------------------------- 
     public void guardarMateria(Materia materia){
     
     String sql ="INSERT INTO materia( nombre, anno, estado) VALUES ( ?, ?, ?)";
@@ -57,7 +57,7 @@ public class MateriaData {
     }
     
     }
-    
+    //------------------------------------------------------------------------------------------------------------- 
     public Materia buscarMateria(int id){
         Materia materia=null;
         String sql="SELECT * FROM materia where id=? AND estado=1;";
@@ -65,7 +65,7 @@ public class MateriaData {
             stp.setInt(1, id);
             if(rs.next()){
                 materia=new Materia();
-                materia.setIdMateria(rs.getInt("IdMateria"));
+                materia.setIdMateria(rs.getInt("idMateria"));
                 materia.setNombre(rs.getString("nombre"));
                 materia.setAnno(rs.getInt("anno"));
                 materia.setEstado(rs.getBoolean("estado"));
@@ -81,7 +81,7 @@ public class MateriaData {
         }
         return materia;
     }
-    
+    //------------------------------------------------------------------------------------------------------------- 
     public List<Materia> listarMaterias(){
         Materia materia=null;
          List<Materia> listaMaterias= new ArrayList<>();
@@ -89,7 +89,7 @@ public class MateriaData {
         try(PreparedStatement stp=con.prepareCall(sql);ResultSet rs=stp.executeQuery();){
                 while(rs.next()){
                     materia=new Materia();
-                    materia.setIdMateria(rs.getInt("IdMateria"));
+                    materia.setIdMateria(rs.getInt("idMateria"));
                     materia.setNombre(rs.getString("nombre"));
                     materia.setAnno(rs.getInt("anno"));
                     materia.setEstado(rs.getBoolean("estado"));
@@ -104,7 +104,7 @@ public class MateriaData {
         }
         return listaMaterias;
     }
-    
+    //------------------------------------------------------------------------------------------------------------- 
     public void modificarMateria(Materia materia){
         String sql="UPDATE materia SET nombre=?,anno=? WHERE idMateria=?";
         try(PreparedStatement stp=con.prepareCall(sql);){
@@ -124,6 +124,7 @@ public class MateriaData {
         }
         
     }
+    //------------------------------------------------------------------------------------------------------------- 
     public void eliminarMateria(int id){
          String sql = "UPDATE materia SET estado = 0 WHERE idMateria = ?";
         try(PreparedStatement stp=con.prepareCall(sql);){
@@ -145,7 +146,7 @@ public class MateriaData {
     
   
     
-    
+    //------------------------------------------------------------------------------------------------------------- 
       private void cerrarConexion(Connection con) {
         if (con != null) {
             try {
@@ -157,6 +158,6 @@ public class MateriaData {
         }
 
     }
-    
+    //------------------------------------------------------------------------------------------------------------- 
     
 }
