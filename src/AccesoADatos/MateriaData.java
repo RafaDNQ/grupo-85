@@ -60,7 +60,7 @@ public class MateriaData {
     public Materia buscarMateria(int id) {
         Materia materia = null;
         String sql = "SELECT * FROM materia where id=? AND estado=1;";
-        try (PreparedStatement stp = con.prepareCall(sql); ResultSet rs = stp.executeQuery()) {
+        try (PreparedStatement stp = con.prepareStatement(sql); ResultSet rs = stp.executeQuery()) {
             stp.setInt(1, id);
             if (rs.next()) {
                 materia = new Materia();
@@ -86,7 +86,7 @@ public class MateriaData {
         Materia materia = null;
         List<Materia> listaMaterias = new ArrayList<>();
         String sql = "SELECT * FROM `materia` WHERE activo = 1";
-        try (PreparedStatement stp = con.prepareCall(sql); ResultSet rs = stp.executeQuery();) {
+        try (PreparedStatement stp = con.prepareStatement(sql); ResultSet rs = stp.executeQuery();) {
             while (rs.next()) {
                 materia = new Materia();
                 materia.setIdMateria(rs.getInt("idMateria"));
@@ -108,7 +108,7 @@ public class MateriaData {
     //------------------------------------------------------------------------------------------------------------- 
     public void modificarMateria(Materia materia) {
         String sql = "UPDATE materia SET nombre=?,anno=? WHERE idMateria=?";
-        try (PreparedStatement stp = con.prepareCall(sql);) {
+        try (PreparedStatement stp = con.prepareStatement(sql);) {
             stp.setString(1, materia.getNombre());
             stp.setInt(2, materia.getAnno());
             stp.executeUpdate();
@@ -129,7 +129,7 @@ public class MateriaData {
     //------------------------------------------------------------------------------------------------------------- 
     public void eliminarMateria(int id) {
         String sql = "UPDATE materia SET estado = 0 WHERE idMateria = ?";
-        try (PreparedStatement stp = con.prepareCall(sql);) {
+        try (PreparedStatement stp = con.prepareStatement(sql);) {
             stp.setInt(1, id);
             int comprobacion = stp.executeUpdate();
             if (comprobacion == 1) {
