@@ -52,8 +52,9 @@ public class AlumnoData {
     public Alumno buscarAlumno(int id) {
         String sql = "SELECT dni, apellido,nombre,fechaNacimiento FROM alumno WHERE idAlumno = ? AND estado = 1";
         Alumno alumno = null;
-        try (PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
+        try (PreparedStatement ps = con.prepareStatement(sql);) {
             ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
 
                 alumno = new Alumno();
@@ -66,43 +67,44 @@ public class AlumnoData {
 
                 JOptionPane.showMessageDialog(null, "Alumno Guardado");
             } else {
-                JOptionPane.showMessageDialog(null, "No existe ese Alumno");
+                JOptionPane.showMessageDialog(null, "no se encontro alumno :V", "Error", JOptionPane.ERROR_MESSAGE);
+
             }
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
-        } finally {
-            cerrarConexion(con);
         }
         return alumno;
     }
 
     public Alumno buscarAlumnoDNI(int dni) {
-        String sql = "SELECT dni, apellido,nombre,fechaNacimiento FROM alumno WHERE dni = ? AND estado = 1";
+        String sql = "SELECT * FROM alumno WHERE dni = ? AND estado = 1";
         Alumno alumno = null;
-        try (PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
+        System.out.println(dni);
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, dni);
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
 
                 alumno = new Alumno();
-                alumno.setIdAlumno(rs.getInt("IdAlumno"));
+                alumno.setIdAlumno(rs.getInt("idAlumno"));
                 alumno.setDni(rs.getInt("dni"));
                 alumno.setApellido(rs.getString("apellido"));
                 alumno.setNombre(rs.getString("nombre"));
                 alumno.setFechaDeNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
-                alumno.setEstado(true);
+                alumno.setEstado(rs.getBoolean("estado"));
 
-                JOptionPane.showMessageDialog(null, "Alumno Guardado");
+                JOptionPane.showMessageDialog(null, "Alumno Encontrado");
             } else {
                 JOptionPane.showMessageDialog(null, "No existe ese Alumno");
             }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
-        } finally {
-            cerrarConexion(con);
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno :,( " + ex.getMessage());
+            ex.printStackTrace();
         }
         return alumno;
     }
@@ -136,7 +138,7 @@ public class AlumnoData {
         String sql = "UPDATE alumno SET dni =?, apellido=?, nombre=?, fechaNacimiento=?"
                 + "WHERE idAlumno=?";
 
-        try(PreparedStatement ps = con.prepareStatement(sql);) {
+        try (PreparedStatement ps = con.prepareStatement(sql);) {
             ps.setInt(1, alumno.getDni());
             ps.setString(2, alumno.getApellido());
             ps.setString(3, alumno.getNombre());
@@ -151,8 +153,6 @@ public class AlumnoData {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
-        }finally{
-            cerrarConexion(con);
         }
     }
 
@@ -169,9 +169,24 @@ public class AlumnoData {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
-        } finally {
-            cerrarConexion(con);
         }
+    }
+
+    public void removeralumno() {
+
+        String sql = "DELETE FROM alumno WHERE estado = 0";
+
+        try (PreparedStatement ps = con.prepareStatement(sql);) {
+
+            int exito = ps.executeUpdate();
+            if (exito == 1) {
+                JOptionPane.showMessageDialog(null, "Alumno eliminado :V ");
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
+        }
+
     }
 
     private void cerrarConexion(Connection con) {
