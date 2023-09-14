@@ -1,4 +1,3 @@
-
 package AccesoADatos;
 
 import java.sql.Connection;
@@ -6,10 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-
 public class Conexion {
 
-    private static String url = "jdbc:mariadb://localhost:3306/grupo-85";
+    private static String url = "jdbc:mariadb://localhost:3306/grupo85";
     private static String usuario = "root";
     private static String password = "";
 
@@ -35,7 +33,7 @@ public class Conexion {
             con = DriverManager.getConnection(url + "?useLegacyDatetimeCode=false&serverTimezone=UTC" + "&user=" + usuario + "&password=" + password);
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error de conexion ");
+            JOptionPane.showMessageDialog(null, "Error de conexion :,)");
             ex.printStackTrace();
         }
 
