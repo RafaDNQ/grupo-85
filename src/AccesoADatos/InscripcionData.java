@@ -46,9 +46,7 @@ public class InscripcionData {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
 
     }
 
@@ -71,9 +69,7 @@ public class InscripcionData {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
 
         return listaInscripciones;
     }
@@ -99,9 +95,7 @@ public class InscripcionData {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
 
         return listaInscripcionesPorAlumnos;
     }
@@ -125,9 +119,7 @@ public class InscripcionData {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
 
         return materiasCursadas;
     }
@@ -156,9 +148,7 @@ public class InscripcionData {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
 
         return listaMateriasNOCursadas;
     }
@@ -180,9 +170,7 @@ public class InscripcionData {
          } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
         
 
     }
@@ -204,9 +192,7 @@ public class InscripcionData {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
 
     }
 
@@ -234,9 +220,7 @@ public class InscripcionData {
          }catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
 
         return listaAlumnoXMateriaMateria;
     }
@@ -249,9 +233,7 @@ public class InscripcionData {
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al cerror la conexion" + ex.getMessage(), "Error Conexion", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
-            } finally {
-                cerrarConexion(con);
-            }
+            } 
         }
 
     }

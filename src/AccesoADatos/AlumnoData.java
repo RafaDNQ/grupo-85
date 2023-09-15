@@ -22,7 +22,7 @@ public class AlumnoData {
 
     public void guardarAlumno(Alumno alumno) {
 
-        String sql = "INSERT INTO alumno(dni,apellido,nombre,fechaNac,estado)"
+        String sql = "INSERT INTO alumno(dni,apellido,nombre,fechaNacimiento,estado)"
                 + "VALUE (?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
@@ -43,10 +43,8 @@ public class AlumnoData {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
-
-        } finally {
-            cerrarConexion(con);
-        }
+            ex.printStackTrace();
+        } 
     }
 
     public Alumno buscarAlumno(int id) {
@@ -80,7 +78,7 @@ public class AlumnoData {
     public Alumno buscarAlumnoDNI(int dni) {
         String sql = "SELECT * FROM alumno WHERE dni = ? AND estado = 1";
         Alumno alumno = null;
-        System.out.println(dni);
+        
         try {
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -128,9 +126,7 @@ public class AlumnoData {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Alumno" + ex.getMessage());
             ex.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
         return listaAlumno;
     }
 

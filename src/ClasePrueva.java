@@ -18,8 +18,8 @@ public class ClasePrueva {
     public static void main(String[] args) {
         
         AlumnoData alum = new AlumnoData();
-        alum.buscarAlumnoDNI(20100100);
-        
+        //alum.buscarAlumnoDNI(20100100);
+        //alum.removeralumno();
         
         
     }

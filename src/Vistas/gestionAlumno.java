@@ -46,7 +46,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
         jbNuevo = new javax.swing.JButton();
         jbEliminar = new javax.swing.JButton();
         jbSalir = new javax.swing.JButton();
-        jbGuardar = new javax.swing.JButton();
+        jbModificar = new javax.swing.JButton();
         jbBuscar = new javax.swing.JButton();
         jtDocumento = new javax.swing.JTextField();
         jtApellido = new javax.swing.JTextField();
@@ -89,7 +89,6 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
         jLabel6.setBounds(47, 202, 39, 16);
 
         jbNuevo.setText("Nuevo");
-        jbNuevo.setEnabled(false);
         jbNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbNuevoActionPerformed(evt);
@@ -117,14 +116,15 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
         jPanel1.add(jbSalir);
         jbSalir.setBounds(318, 286, 56, 32);
 
-        jbGuardar.setText("Modificar");
-        jbGuardar.addActionListener(new java.awt.event.ActionListener() {
+        jbModificar.setText("Modificar");
+        jbModificar.setEnabled(false);
+        jbModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbGuardarActionPerformed(evt);
+                jbModificarActionPerformed(evt);
             }
         });
-        jPanel1.add(jbGuardar);
-        jbGuardar.setBounds(210, 286, 90, 32);
+        jPanel1.add(jbModificar);
+        jbModificar.setBounds(210, 286, 90, 32);
 
         jbBuscar.setText("Buscar");
         jbBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -209,8 +209,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
         if (alumG != null) {
 
             jbEliminar.setEnabled(true);
-            jbGuardar.setEnabled(true);
-            jbNuevo.setEnabled(false);
+            jbModificar.setEnabled(true);
             jtApellido.setText(alumG.getApellido());
             jtNombre.setText(alumG.getNombre());
             jdFecha.setDate(Date.valueOf(alumG.getFechaDeNacimiento()));
@@ -251,9 +250,12 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
         alum.eliminarAlumno(alumG.getIdAlumno());
         alum.removeralumno();
         alumG = null;
-
+        jtDocumento.setText("");
+        jtApellido.setText("");
+        jtNombre.setText("");
+        jdFecha.setDate(null);
         jbEliminar.setEnabled(false);
-        jbNuevo.setEnabled(false);
+        
 
 
     }//GEN-LAST:event_jbEliminarActionPerformed
@@ -265,7 +267,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jbSalirActionPerformed
 
-    private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
+    private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
         //boton modificar
         Alumno al = new Alumno();
         int dni = Integer.parseInt(jtDocumento.getText());
@@ -286,7 +288,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
         alum.modificarAlumno(al);
 
 
-    }//GEN-LAST:event_jbGuardarActionPerformed
+    }//GEN-LAST:event_jbModificarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -299,7 +301,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbBuscar;
     private javax.swing.JButton jbEliminar;
-    private javax.swing.JButton jbGuardar;
+    private javax.swing.JButton jbModificar;
     private javax.swing.JButton jbNuevo;
     private javax.swing.JButton jbSalir;
     private com.toedter.calendar.JDateChooser jdFecha;

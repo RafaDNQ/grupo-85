@@ -22,7 +22,7 @@ public class MateriaData {
 
     private Connection con = null;
 
-    private MateriaData() {
+    public MateriaData() {
 
         con = Conexion.getConexion();
 
@@ -50,8 +50,6 @@ public class MateriaData {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + ex.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
-        } finally {
-            cerrarConexion(con);
         }
 
     }
@@ -59,9 +57,10 @@ public class MateriaData {
     //------------------------------------------------------------------------------------------------------------- 
     public Materia buscarMateria(int id) {
         Materia materia = null;
-        String sql = "SELECT * FROM materia where id=? AND estado=1;";
-        try (PreparedStatement stp = con.prepareStatement(sql); ResultSet rs = stp.executeQuery()) {
+        String sql = "SELECT * FROM materia where idMateria=? AND estado=1;";
+        try (PreparedStatement stp = con.prepareStatement(sql);) {
             stp.setInt(1, id);
+             ResultSet rs = stp.executeQuery();
             if (rs.next()) {
                 materia = new Materia();
                 materia.setIdMateria(rs.getInt("idMateria"));
@@ -75,9 +74,7 @@ public class MateriaData {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + e.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
         return materia;
     }
 
@@ -99,9 +96,7 @@ public class MateriaData {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + e.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
         return listaMaterias;
     }
 
@@ -111,6 +106,7 @@ public class MateriaData {
         try (PreparedStatement stp = con.prepareStatement(sql);) {
             stp.setString(1, materia.getNombre());
             stp.setInt(2, materia.getAnno());
+            stp.setInt(3, materia.getIdMateria());
             stp.executeUpdate();
             int exito = stp.executeUpdate();
 
@@ -120,8 +116,6 @@ public class MateriaData {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + e.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-        } finally {
-            cerrarConexion(con);
         }
 
     }
@@ -141,9 +135,7 @@ public class MateriaData {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + e.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-        } finally {
-            cerrarConexion(con);
-        }
+        } 
     }
 
     //------------------------------------------------------------------------------------------------------------- 
