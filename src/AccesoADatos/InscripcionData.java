@@ -106,9 +106,11 @@ public class InscripcionData {
         Materia mat = null;
         String sql = "SELECT inscripcion.idMateria, nombre, anno FROM inscripcion JOIN materia "
                 + "ON(inscripcion.idMateria=materia.idMateria) WHERE inscripcion.idAlumno = ?;";
-        try (PreparedStatement stp = con.prepareStatement(sql); ResultSet rs = stp.executeQuery();) {
+        try (PreparedStatement stp = con.prepareStatement(sql);) {
             stp.setInt(1, idAlumno);
+            ResultSet rs = stp.executeQuery();
             while (rs.next()) {
+                mat=new Materia();
                 mat.setIdMateria(rs.getInt("idMateria"));
                 mat.setNombre(rs.getString("nombre"));
                 mat.setAnno(rs.getInt("anno"));
@@ -135,9 +137,11 @@ public class InscripcionData {
                 + "    FROM Inscripcion I\n"
                 + "    WHERE I.idAlumno = ?\n"
                 + ");";
-        try (PreparedStatement stp = con.prepareStatement(sql); ResultSet rs = stp.executeQuery();) {
+        try (PreparedStatement stp = con.prepareStatement(sql); ) {
             stp.setInt(1, idAlumno);
+            ResultSet rs = stp.executeQuery();
             while (rs.next()) {
+                 mat=new Materia();
                 mat.setIdMateria(rs.getInt("idMateria"));
                 mat.setNombre(rs.getString("nombre"));
                 mat.setAnno(rs.getInt("anno"));

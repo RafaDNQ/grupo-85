@@ -109,7 +109,7 @@ public class AlumnoData {
 
     public List<Alumno> listaralumnos() throws SQLException {
         List<Alumno> listaAlumno = new ArrayList<>();
-        String sql = "SELECT * FROM `alumno` WHERE activo = 1";
+        String sql = "SELECT * FROM `alumno` WHERE estado = 1";
         try (PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
 
             while (rs.next()) {
@@ -119,7 +119,7 @@ public class AlumnoData {
                 alumno.setApellido(rs.getString("apellido"));
                 alumno.setNombre(rs.getString("nombre"));
                 alumno.setFechaDeNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
-                alumno.setEstado(true);
+                alumno.setEstado(rs.getBoolean("estado"));
                 listaAlumno.add(alumno);
 
             }
