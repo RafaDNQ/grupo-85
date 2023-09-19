@@ -7,7 +7,9 @@ package Vistas;
 import AccesoADatos.AlumnoData;
 import AccesoADatos.InscripcionData;
 import Entidades.Alumno;
+import Entidades.Inscripcion;
 import Entidades.Materia;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,6 +33,7 @@ public class formularioInscripciones extends javax.swing.JInternalFrame {
     ButtonGroup estados = new ButtonGroup();
     DefaultTableModel modelo = new DefaultTableModel();
     InscripcionData insdata = new InscripcionData();
+    int idMateriaSelecionada = 0;
 
     public formularioInscripciones() {
         initComponents();
@@ -42,8 +47,9 @@ public class formularioInscripciones extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Error de coneccion", "ERROR", HEIGHT);
             ex.printStackTrace();
         }
-        CargarAlumnos();
         CargarTabla();
+        CargarAlumnos();
+        
 
     }
 
@@ -101,6 +107,25 @@ public class formularioInscripciones extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jtTabla);
 
+        jtTabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+
+            public void valueChanged(ListSelectionEvent e) {
+                // Este código se ejecutará cuando se seleccione una fila en la tabla
+                if (!e.getValueIsAdjusting()) { // Evita que se ejecute dos veces por cada selección
+                    int filaSeleccionada = jtTabla.getSelectedRow();
+                    if (filaSeleccionada != -1) { // Verifica si se ha seleccionado una fila válida
+
+                        for (int i = 0; i < 1; i++) {
+                            idMateriaSelecionada =(Integer) modelo.getValueAt(filaSeleccionada, i);
+
+                        }
+
+                    }
+                }
+            }
+        });
+
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel2.setText("Selecione un alumno:");
 
@@ -135,6 +160,11 @@ public class formularioInscripciones extends javax.swing.JInternalFrame {
         });
 
         jbAnular.setText("Alular inscripcion");
+        jbAnular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAnularActionPerformed(evt);
+            }
+        });
 
         jbSalir.setText("Salir");
         jbSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -229,11 +259,11 @@ public class formularioInscripciones extends javax.swing.JInternalFrame {
 
     private void jcComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcComboActionPerformed
         //combo
-         borrar();
+        borrar();
 
         List<Materia> matC = new ArrayList();
         List<Materia> matNC = new ArrayList();
-       
+
         int id = ((Alumno) jcCombo.getSelectedItem()).getIdAlumno();
         if (jrMI.isSelected()) {
             jbAnular.setEnabled(true);
@@ -246,18 +276,17 @@ public class formularioInscripciones extends javax.swing.JInternalFrame {
 
             }
 
-        }else{
+        } else {
             jbAnular.setEnabled(false);
             jbInscribir.setEnabled(true);
-             matNC = insdata.obtenerMateriasNOCursadas(id);
+            matNC = insdata.obtenerMateriasNOCursadas(id);
             for (Materia m : matNC) {
                 modelo.addRow(new Object[]{
                     m.getIdMateria(), m.getNombre(), m.getAnno()
                 });
 
             }
-        
-        
+
         }
 
 
@@ -265,37 +294,60 @@ public class formularioInscripciones extends javax.swing.JInternalFrame {
 
     private void jbInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbInscribirActionPerformed
         // inscribir
+        int id = ((Alumno) jcCombo.getSelectedItem()).getIdAlumno();
+        int nota = 0;
+        Alumno alu = null;
+        Materia mat = null;
+        Inscripcion ins = null;
+        if (idMateriaSelecionada > 0) {
+            ins = new Inscripcion();
+            mat = new Materia();
+            alu = new Alumno();
+            mat.setIdMateria(idMateriaSelecionada);
+            alu.setIdAlumno(id);
+
+            ins.setNota(0);
+            ins.setAlumno(alu);
+            ins.setMateria(mat);
+            insdata.guardarInscripcion(ins);
+            idMateriaSelecionada = 0;
+            //-----------
+            refrescar();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Sin Materia Selecionada");
+        }
+//
 //        jtTabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-//    @Override
-//    
-//    public void valueChanged(ListSelectionEvent e) {
-//        // Este código se ejecutará cuando se seleccione una fila en la tabla
-//        if (!e.getValueIsAdjusting()) { // Evita que se ejecute dos veces por cada selección
-//            int filaSeleccionada = jtTabla.getSelectedRow();
-//            if (filaSeleccionada != -1) { // Verifica si se ha seleccionado una fila válida
-//               TableModel modelotabla = jtTabla.getModel();
-//               int columnas = modelotabla.getColumnCount();
-//               for(int i=0;i<columnas;i++){
-//                
+//            @Override
+//
+//            public void valueChanged(ListSelectionEvent e) {
+//                // Este código se ejecutará cuando se seleccione una fila en la tabla
+//                if (!e.getValueIsAdjusting()) { // Evita que se ejecute dos veces por cada selección
+//                    int filaSeleccionada = jtTabla.getSelectedRow();
+//                    if (filaSeleccionada != -1) { // Verifica si se ha seleccionado una fila válida
+//
+//                        for (int i = 0; i < 1; i++) {
+//                           int idMateriaSelecionada =(Integer) modelo.getValueAt(filaSeleccionada, i);
+//                            
+//
+//                        }
+//
+//                    }
 //                }
 //            }
-//        }
-//    }
-//});
-//        
-        
-        
-        
-        
+//        });
+
+
     }//GEN-LAST:event_jbInscribirActionPerformed
 
     private void jrMIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrMIActionPerformed
         // jrboton
-         borrar();
+        borrar();
 
         List<Materia> matC = new ArrayList();
         List<Materia> matNC = new ArrayList();
-       
+
         int id = ((Alumno) jcCombo.getSelectedItem()).getIdAlumno();
         if (jrMI.isSelected()) {
             jbAnular.setEnabled(true);
@@ -308,31 +360,30 @@ public class formularioInscripciones extends javax.swing.JInternalFrame {
 
             }
 
-        }else{
+        } else {
             jbAnular.setEnabled(false);
             jbInscribir.setEnabled(true);
-             matNC = insdata.obtenerMateriasNOCursadas(id);
+            matNC = insdata.obtenerMateriasNOCursadas(id);
             for (Materia m : matNC) {
                 modelo.addRow(new Object[]{
                     m.getIdMateria(), m.getNombre(), m.getAnno()
                 });
 
             }
-        
-        
+
         }
-        
-        
+
+
     }//GEN-LAST:event_jrMIActionPerformed
 
     private void jrMNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrMNIActionPerformed
         //jrboton2
-          // jrboton
-         borrar();
+        // jrboton
+        borrar();
 
         List<Materia> matC = new ArrayList();
         List<Materia> matNC = new ArrayList();
-       
+
         int id = ((Alumno) jcCombo.getSelectedItem()).getIdAlumno();
         if (jrMI.isSelected()) {
             jbAnular.setEnabled(true);
@@ -345,33 +396,56 @@ public class formularioInscripciones extends javax.swing.JInternalFrame {
 
             }
 
-        }else{
+        } else {
             jbAnular.setEnabled(false);
             jbInscribir.setEnabled(true);
-             matNC = insdata.obtenerMateriasNOCursadas(id);
+            matNC = insdata.obtenerMateriasNOCursadas(id);
             for (Materia m : matNC) {
                 modelo.addRow(new Object[]{
                     m.getIdMateria(), m.getNombre(), m.getAnno()
                 });
 
             }
-        
-        
+
         }
-        
-        
+
+
     }//GEN-LAST:event_jrMNIActionPerformed
 
-    private void borrar(){
-    int filas = modelo.getRowCount()-1;
-    for(int i=filas;i>=0;i--){
-    modelo.removeRow(i);
-    
+    private void jbAnularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAnularActionPerformed
+        // anular
+
+        int id = ((Alumno) jcCombo.getSelectedItem()).getIdAlumno();
+
+        if (idMateriaSelecionada > 0) {
+
+            insdata.borrarInscripcionMateriaAlumno(id, idMateriaSelecionada);
+            idMateriaSelecionada = 0;
+            //-----------
+            refrescar();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Sin Materia Selecionada");
+        }
+
+
+    }//GEN-LAST:event_jbAnularActionPerformed
+
+    private void borrar() {
+        int filas = modelo.getRowCount() - 1;
+        for (int i = filas; i >= 0; i--) {
+            modelo.removeRow(i);
+
+        }
+
     }
-    
+
+    private void refrescar() {
+        ActionEvent eventoSimulado = new ActionEvent(jcCombo, ActionEvent.ACTION_PERFORMED, "");
+        jcCombo.getActionListeners()[0].actionPerformed(eventoSimulado);
+
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -387,7 +461,5 @@ public class formularioInscripciones extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton jrMNI;
     private javax.swing.JTable jtTabla;
     // End of variables declaration//GEN-END:variables
-
-
 
 }

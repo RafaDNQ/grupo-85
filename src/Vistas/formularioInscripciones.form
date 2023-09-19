@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JInternalFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JInternalFrameFormInfo">
   <Properties>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[500, 500]"/>
@@ -144,6 +144,9 @@
                   </Table>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="&#xa;        jtTabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {&#xa;            @Override&#xa;&#xa;            public void valueChanged(ListSelectionEvent e) {&#xa;                // Este c&#xf3;digo se ejecutar&#xe1; cuando se seleccione una fila en la tabla&#xa;                if (!e.getValueIsAdjusting()) { // Evita que se ejecute dos veces por cada selecci&#xf3;n&#xa;                    int filaSeleccionada = jtTabla.getSelectedRow();&#xa;                    if (filaSeleccionada != -1) { // Verifica si se ha seleccionado una fila v&#xe1;lida&#xa;&#xa;                        for (int i = 0; i &lt; 1; i++) {&#xa;                           idMateriaSelecionada =(Integer) modelo.getValueAt(filaSeleccionada, i);&#xa;                            &#xa;&#xa;                        }&#xa;&#xa;                    }&#xa;                }&#xa;            }&#xa;        });&#xa;"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -204,6 +207,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Alular inscripcion"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAnularActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jbSalir">
           <Properties>

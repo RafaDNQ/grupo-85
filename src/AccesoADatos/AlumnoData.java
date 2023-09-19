@@ -37,7 +37,7 @@ public class AlumnoData {
                 if (rs.next()) {
 
                     alumno.setIdAlumno(rs.getInt(1));
-                    JOptionPane.showMessageDialog(null, "Alumno Guardado");
+                   // JOptionPane.showMessageDialog(null, "Alumno Guardado :)");
                 }
             }
 
@@ -63,9 +63,9 @@ public class AlumnoData {
                 alumno.setFechaDeNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
                 alumno.setEstado(true);
 
-                JOptionPane.showMessageDialog(null, "Alumno Guardado");
+               // JOptionPane.showMessageDialog(null, "Alumno Guardado :V");
             } else {
-                JOptionPane.showMessageDialog(null, "no se encontro alumno :V", "Error", JOptionPane.ERROR_MESSAGE);
+                //JOptionPane.showMessageDialog(null, "no se encontro alumno :V", "Error", JOptionPane.ERROR_MESSAGE);
 
             }
 
@@ -95,7 +95,7 @@ public class AlumnoData {
                 alumno.setFechaDeNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
                 alumno.setEstado(rs.getBoolean("estado"));
 
-                JOptionPane.showMessageDialog(null, "Alumno Encontrado");
+                //JOptionPane.showMessageDialog(null, "Alumno Encontrado");
             } else {
                 JOptionPane.showMessageDialog(null, "No existe ese Alumno");
             }

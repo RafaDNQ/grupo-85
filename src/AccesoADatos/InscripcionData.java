@@ -19,10 +19,13 @@ public class InscripcionData {
     private final Connection con;
     private MateriaData matData;
     private AlumnoData aluData;
+    
 
     public InscripcionData() {
 
         con = Conexion.getConexion();
+        aluData = new AlumnoData();
+        matData = new MateriaData();
     }
 
     //-------------------------------------------------------------------------------------------------------------      
@@ -81,8 +84,9 @@ public class InscripcionData {
         Inscripcion insc = null;
         List<Inscripcion> listaInscripciones = new ArrayList<>();
         String sql = "SELECT * FROM `inscripcion` WHERE idAlumno = ? ";
-        try (PreparedStatement stp = con.prepareStatement(sql); ResultSet rs = stp.executeQuery();) {
+        try (PreparedStatement stp = con.prepareStatement(sql);) {
             stp.setInt(1, idAlumno);
+            ResultSet rs = stp.executeQuery();
             while (rs.next()) {
                 insc = new Inscripcion();
                 insc.setIdIncripto(rs.getInt("idInscripto"));

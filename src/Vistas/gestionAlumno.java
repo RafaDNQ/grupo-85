@@ -197,6 +197,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
 
         Alumno alum2 = new Alumno(dni, apellido, nombre, fecha, estado);
         alum.guardarAlumno(alum2);
+        JOptionPane.showMessageDialog(null, "Alumno Guardado :)");
 
 
     }//GEN-LAST:event_jbNuevoActionPerformed
@@ -213,6 +214,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
             jtApellido.setText(alumG.getApellido());
             jtNombre.setText(alumG.getNombre());
             jdFecha.setDate(Date.valueOf(alumG.getFechaDeNacimiento()));
+             JOptionPane.showMessageDialog(null, "Alumno Guardado :V");
 
             if (alumG.isEstado()) {
                 jrBotonActivo.setSelected(true);
@@ -222,6 +224,8 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
                 jrBotonInactivo.setSelected(true);
             }
 
+        }else{
+         JOptionPane.showMessageDialog(null, "Alumno no encontrado");
         }
 
 
