@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,24 +26,29 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
 
     AlumnoData AG = new AlumnoData();
     List<Alumno> LA;
-     DefaultTableModel modelo = new DefaultTableModel();
+    DefaultTableModel modelo = new DefaultTableModel(){
+    public boolean isCellEditable(){
+    return true;
+    }
+    };
     InscripcionData insdata = new InscripcionData();
-    
-    
-    
+    double notaG=0;
+
     public actualizarNotas() {
         initComponents();
-         try {
+        try {
             LA = new ArrayList<>(AG.listaralumnos());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error de coneccion", "ERROR", HEIGHT);
             ex.printStackTrace();
         }
-         CargarAlumnos();
+        CargarAlumnos();
         CargarTabla();
+        borrar();
+        jbModifica.setEnabled(false);
     }
-    
-     private void CargarAlumnos() {
+
+    private void CargarAlumnos() {
         for (Alumno a : LA) {
             jcCombo.addItem(a);
         }
@@ -66,7 +73,7 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jbModifica = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtTabla = new javax.swing.JTable();
@@ -76,9 +83,19 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
 
         setPreferredSize(new java.awt.Dimension(500, 500));
 
-        jButton1.setText("Guardar");
+        jbModifica.setText("Guardar / Modificar");
+        jbModifica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbModificaActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Salir");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jtTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -91,6 +108,24 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
             }
         ));
         jScrollPane1.setViewportView(jtTabla);
+        jtTabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+
+            public void valueChanged(ListSelectionEvent e) {
+                // Este código se ejecutará cuando se seleccione una fila en la tabla
+                if (!e.getValueIsAdjusting()) { // Evita que se ejecute dos veces por cada selección
+                    int filaSeleccionada = jtTabla.getSelectedRow();
+                    if (filaSeleccionada != -1) { // Verifica si se ha seleccionado una fila válida
+                        jbModifica.setEnabled(true);
+                        for (int i = 2; i <= 2; i++) {
+                            notaG =(Double) modelo.getValueAt(filaSeleccionada, i);
+
+                        }
+
+                    }
+                }
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Cargar Notas");
@@ -115,10 +150,10 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
                         .addComponent(jcCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton1)
+                            .addComponent(jbModifica)
                             .addGap(18, 18, 18)
                             .addComponent(jButton2))))
-                .addContainerGap(190, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(109, 109, 109)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -138,8 +173,8 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton1))
-                .addContainerGap(119, Short.MAX_VALUE))
+                    .addComponent(jbModifica))
+                .addContainerGap(126, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -158,34 +193,84 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
 
     private void jcComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcComboActionPerformed
         // TODO add your handling code here:
+        borrar();
+        Alumno alu = (Alumno) jcCombo.getSelectedItem();
+        ArrayList<Inscripcion> listains = new ArrayList<Inscripcion>();
+        List<Materia> listaMateria = insdata.obtenerMateriasCursadas(alu.getIdAlumno());
+        listains = (ArrayList) insdata.obtenerInscripcionesPorAlumno(alu.getIdAlumno());
         
-      Alumno alu = (Alumno) jcCombo.getSelectedItem();
-     List<Inscripcion> listains =insdata.obtenerInscripcionesPorAlumno(alu.getIdAlumno());
-     List<Materia> listaMateria = insdata.obtenerMateriasCursadas(alu.getIdAlumno());
-     
-        if (listaMateria != null && listains != null) {
-            for (Materia mat : listaMateria) {
-                for(Inscripcion insc:listains){
-                modelo.addRow(new Object[]{
-                    mat.getIdMateria(),mat.getNombre(),insc.getNota()
-                });
-                }
+
+        for (Inscripcion mat : listains) {
+            modelo.addRow(new Object[]{mat.getMateria().getIdMateria(),mat.getMateria().getNombre(),mat.getNota()
+            });       
             }
+    }//GEN-LAST:event_jcComboActionPerformed
 
-        }
+    private void jbModificaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificaActionPerformed
+        // guardar
+        System.out.println(notaG);
+         Alumno alu = (Alumno) jcCombo.getSelectedItem();
+        jtTabla.getSelectedRow();
+        
+        insdata.actualizarNota(alu.getIdAlumno(), WIDTH, notaG);
+        
+        
+        
+        
+        
+        
+        
+        
+//        jtTabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+//            @Override
+//
+//            public void valueChanged(ListSelectionEvent e) {
+//                // Este código se ejecutará cuando se seleccione una fila en la tabla
+//                if (!e.getValueIsAdjusting()) { // Evita que se ejecute dos veces por cada selección
+//                    int filaSeleccionada = jtTabla.getSelectedRow();
+//                    if (filaSeleccionada != -1) { // Verifica si se ha seleccionado una fila válida
+//                      jbModifica.setEnabled(true);
+//                        for (int i = 2; i <= 2; i++) {
+//                           notaG =(Double) modelo.getValueAt(filaSeleccionada, i);
+//                            
+//
+//                        }
+//
+//                    }
+//                }
+//            }
+//        });
 
         
-    }//GEN-LAST:event_jcComboActionPerformed
+        
+        
+        
+    }//GEN-LAST:event_jbModificaActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // salir
+        
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbModifica;
     private javax.swing.JComboBox<Alumno> jcCombo;
     private javax.swing.JTable jtTabla;
     // End of variables declaration//GEN-END:variables
+private void borrar() {
+        int filas = modelo.getRowCount() - 1;
+        for (int i = filas; i >= 0; i--) {
+            modelo.removeRow(i);
+
+        }
+
+    }
+
 }

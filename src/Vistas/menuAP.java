@@ -56,7 +56,6 @@ public class menuAP extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 255, 51));
-        setPreferredSize(new java.awt.Dimension(600, 600));
 
         escritorio.setPreferredSize(new java.awt.Dimension(600, 600));
 
@@ -118,6 +117,11 @@ public class menuAP extends javax.swing.JFrame {
         jMenu4.setText("Consultar");
 
         jMenuItem5.setText("Alumnos por Materia");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem5);
 
         jMenuBar1.add(jMenu4);
@@ -190,6 +194,18 @@ public class menuAP extends javax.swing.JFrame {
         escritorio.moveToFront(ges);
         
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+           escritorio.removeAll();
+        escritorio.repaint();
+        consultaAlumnosXMateria ges = new consultaAlumnosXMateria();
+        ges.setVisible(true);
+        escritorio.add(ges);
+        escritorio.moveToFront(ges);
+        
+        
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -80,11 +80,12 @@ public class InscripcionData {
     //-------------------------------------------------------------------------------------------------------------      
     public List<Inscripcion> obtenerInscripcionesPorAlumno(int idAlumno) {
 
-        List<Inscripcion> listaInscripcionesPorAlumnos = new ArrayList<>();
+        
         Inscripcion insc = null;
         List<Inscripcion> listaInscripciones = new ArrayList<>();
         String sql = "SELECT * FROM `inscripcion` WHERE idAlumno = ? ";
-        try (PreparedStatement stp = con.prepareStatement(sql);) {
+        try {
+            PreparedStatement stp = con.prepareStatement(sql);
             stp.setInt(1, idAlumno);
             ResultSet rs = stp.executeQuery();
             while (rs.next()) {
@@ -101,7 +102,7 @@ public class InscripcionData {
             ex.printStackTrace();
         } 
 
-        return listaInscripcionesPorAlumnos;
+        return listaInscripciones;
     }
 
     //-------------------------------------------------------------------------------------------------------------      
