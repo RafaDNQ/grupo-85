@@ -57,6 +57,7 @@ public class menuAP extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Universidad");
         setBackground(new java.awt.Color(0, 255, 51));
+        setPreferredSize(new java.awt.Dimension(600, 600));
 
         escritorio.setPreferredSize(new java.awt.Dimension(600, 600));
 

@@ -121,7 +121,6 @@
                   </Table>
                 </Property>
                 <Property name="cellSelectionEnabled" type="boolean" value="true"/>
-                <Property name="selectionMode" type="int" value="0"/>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
                   <JTableSelectionModel selectionMode="0"/>
                 </Property>

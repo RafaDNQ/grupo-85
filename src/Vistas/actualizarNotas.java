@@ -48,6 +48,7 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
     public actualizarNotas() {
         initComponents();
         CargarTabla();
+        
         try {
             LA = new ArrayList<>(AG.listaralumnos());
         } catch (SQLException ex) {

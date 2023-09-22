@@ -209,7 +209,7 @@ public class gestionMaterias extends javax.swing.JInternalFrame {
         // boton buscar
         try {
 
-            matg = mat.buscarMateria(Integer.parseInt(jtCodigo.getText()));
+            matg = mat.buscarMateria2(Integer.parseInt(jtCodigo.getText()));
             if (matg != null) {
 
                 jtNombre.setText(matg.getNombre());
@@ -284,10 +284,11 @@ public class gestionMaterias extends javax.swing.JInternalFrame {
                 throw new NullPointerException("El nombre de la materia no es valido , texto vacio o caracteres no permitidos");
 
             }
+            mat2.setEstado(jrActivo.isSelected());
             mat2.setAnno(ano);
             mat2.setNombre(nombre);
             mat2.setIdMateria(idMateria);
-            this.mat.modificarMateria(mat2);
+            this.mat.cambiarEstado(mat2);
 
         } catch (NumberFormatException err) {
             JOptionPane.showMessageDialog(this, "ha introducido un año invalido" + err.getMessage(), "Error año invalido", JOptionPane.ERROR_MESSAGE);

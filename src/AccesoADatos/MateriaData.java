@@ -77,6 +77,30 @@ public class MateriaData {
         } 
         return materia;
     }
+    //----------------------------------------------------------------------------------
+    
+     public Materia buscarMateria2(int id) {
+        Materia materia = null;
+        String sql = "SELECT * FROM materia where idMateria=?;";
+        try (PreparedStatement stp = con.prepareStatement(sql);) {
+            stp.setInt(1, id);
+             ResultSet rs = stp.executeQuery();
+            if (rs.next()) {
+                materia = new Materia();
+                materia.setIdMateria(rs.getInt("idMateria"));
+                materia.setNombre(rs.getString("nombre"));
+                materia.setAnno(rs.getInt("anno"));
+                materia.setEstado(rs.getBoolean("estado"));
+            } else {
+                System.out.println("Materia no encontrada");
+                JOptionPane.showMessageDialog(null, "No existe la materia");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + e.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        } 
+        return materia;
+    }
 
     //------------------------------------------------------------------------------------------------------------- 
     public List<Materia> listarMaterias() {
@@ -119,6 +143,33 @@ public class MateriaData {
         }
 
     }
+    //-----------------------------------------------------------------------------------
+    public void cambiarEstado(Materia materia){
+     String sql = "UPDATE materia SET nombre=?,anno=?,estado=? WHERE idMateria=?";
+        try (PreparedStatement stp = con.prepareStatement(sql);) {
+            stp.setString(1, materia.getNombre());
+            stp.setInt(2, materia.getAnno());
+            stp.setBoolean(3, materia.isEstado());
+            stp.setInt(4, materia.getIdMateria());
+            stp.executeUpdate();
+            int exito = stp.executeUpdate();
+
+            if (exito == 1) {
+                if(materia.isEstado()){
+                JOptionPane.showMessageDialog(null, "Materia Modificada existosamente");
+                }else{
+                JOptionPane.showMessageDialog(null, "Materia Inactiva Modificada existosamente");
+                }
+                
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error SQL contacte administrador" + e.getMessage(), "Error Conexion base de datos sql", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        
+    
+    }
+    
 
     //------------------------------------------------------------------------------------------------------------- 
     public void eliminarMateria(int id) {
