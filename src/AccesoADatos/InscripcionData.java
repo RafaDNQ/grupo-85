@@ -212,8 +212,9 @@ public class InscripcionData {
         String sql = "SELECT a.idAlumno, a.dni, a.apellido, a.nombre, a.fechaNacimiento, a.estado FROM `inscripcion`  "
                 + "JOIN alumno a ON(a.idAlumno=inscripcion.idAlumno)  "
                 + "JOIN materia m ON(m.idMateria=inscripcion.idMateria) WHERE inscripcion.idMateria= ?;" ;
-         try (PreparedStatement stp = con.prepareStatement(sql);ResultSet rs = stp.executeQuery();) {
+         try (PreparedStatement stp = con.prepareStatement(sql);) {
          stp.setInt(1, idMateria);
+         ResultSet rs = stp.executeQuery();
          while(rs.next()){
          alu= new Alumno();
          alu.setIdAlumno(rs.getInt("idAlumno"));
@@ -223,7 +224,7 @@ public class InscripcionData {
          alu.setFechaDeNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
          alu.setEstado(rs.getBoolean("estado"));
          listaAlumnoXMateriaMateria.add(alu);
-         
+         rs.close();
          }
          
          }catch (SQLException ex) {

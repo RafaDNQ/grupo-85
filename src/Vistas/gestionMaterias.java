@@ -3,10 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
 package Vistas;
-
+//
 import AccesoADatos.MateriaData;
 import Entidades.Materia;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,6 +27,7 @@ public class gestionMaterias extends javax.swing.JInternalFrame {
         estados.add(jrInactivo);
         jrActivo.setSelected(true);
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -203,66 +207,117 @@ public class gestionMaterias extends javax.swing.JInternalFrame {
 
     private void jbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarActionPerformed
         // boton buscar
-        matg = mat.buscarMateria(Integer.parseInt(jtCodigo.getText()));
-           if(matg != null){
+        try {
 
-        jtNombre.setText(matg.getNombre());
-        jtCodigo.setText(""+matg.getIdMateria());
-        jbEliminar.setEnabled(true);
-        jbModificar.setEnabled(true);
-        jtAnno.setText("" + matg.getAnno());
-        if (matg.isEstado()) {
-            jrActivo.setSelected(true);
-            jrInactivo.setSelected(false);
-        } else {
-            jrActivo.setSelected(false);
-            jrInactivo.setSelected(true);
+            matg = mat.buscarMateria(Integer.parseInt(jtCodigo.getText()));
+            if (matg != null) {
+
+                jtNombre.setText(matg.getNombre());
+                jtCodigo.setText("" + matg.getIdMateria());
+                jbEliminar.setEnabled(true);
+                jbModificar.setEnabled(true);
+                jtAnno.setText("" + matg.getAnno());
+                if (matg.isEstado()) {
+                    jrActivo.setSelected(true);
+                    jrInactivo.setSelected(false);
+                } else {
+                    jrActivo.setSelected(false);
+                    jrInactivo.setSelected(true);
+                }
+
+            }
+
+        } catch (NumberFormatException err) {
+            JOptionPane.showMessageDialog(this, "El codigo de busqueda no es un numero", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            jtCodigo.setText("");
         }
-           
-           }
-           
-           
 
 
     }//GEN-LAST:event_jbBuscarActionPerformed
 
     private void jbNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoActionPerformed
         // boton nuevo
-        Materia mat = new Materia();
-        boolean estado = false;
-        if(jrActivo.isSelected()){
-        estado=true;
+        try {
+            Materia mat = new Materia();
+            boolean estado = false;
+            if (jrActivo.isSelected()) {
+                estado = true;
+            }
+            String nombre = jtNombre.getText();
+            int ano = Integer.parseInt(jtAnno.getText());
+
+            if (!verificarMateria(nombre)) {
+                throw new RuntimeException("El nombre contiene");
+            }
+            
+             mat.setNombre(nombre);
+             mat.setAnno(ano);
+             mat.setEstado(estado);
+             this.mat.guardarMateria(mat);
+            
+
+        } catch (NumberFormatException err) {
+            JOptionPane.showMessageDialog(this, "No ha introducido un año  valido" + err.getMessage(), "Año  materia", JOptionPane.WARNING_MESSAGE);
+
+        } catch (RuntimeException err) {
+             JOptionPane.showMessageDialog(this,"EL nombre de la materia no es valido" + err.getMessage(), "advertencia [Campo=materia]", JOptionPane.WARNING_MESSAGE);
+
         }
-        mat.setNombre(jtNombre.getText());
-        mat.setAnno(Integer.parseInt(jtAnno.getText()));
-        mat.setEstado(estado);
-        this.mat.guardarMateria(mat);
-        
-        
+
+       
+
     }//GEN-LAST:event_jbNuevoActionPerformed
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
-         this.dispose();
+        this.dispose();
     }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
-        Materia mat2 = new Materia();
-        mat2.setAnno(Integer.parseInt(jtAnno.getText()));
-        mat2.setNombre(jtNombre.getText());
-        mat2.setIdMateria(Integer.parseInt(jtCodigo.getText()));
-        
-        this.mat.modificarMateria(mat2);
-        
+
+        try {
+            Materia mat2 = new Materia();
+            String nombre = jtNombre.getText();
+            int idMateria = Integer.parseInt(jtCodigo.getText());
+
+            int ano = Integer.parseInt(jtAnno.getText());
+            if (nombre.isEmpty() || !verificarMateria(nombre)) {
+                throw new NullPointerException("El nombre de la materia no es valido , texto vacio o caracteres no permitidos");
+
+            }
+            mat2.setAnno(ano);
+            mat2.setNombre(nombre);
+            mat2.setIdMateria(idMateria);
+            this.mat.modificarMateria(mat2);
+
+        } catch (NumberFormatException err) {
+            JOptionPane.showMessageDialog(this, "ha introducido un año invalido" + err.getMessage(), "Error año invalido", JOptionPane.ERROR_MESSAGE);
+
+        } catch (NullPointerException err) {
+            JOptionPane.showMessageDialog(this, err.getMessage(), "Nombre de Materia", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+
     }//GEN-LAST:event_jbModificarActionPerformed
 
     private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarActionPerformed
-        int idM = Integer.parseInt(jtCodigo.getText());
-        
-        this.mat.eliminarMateria(idM);
-        
-        
-    }//GEN-LAST:event_jbEliminarActionPerformed
 
+        try {
+            int idM = Integer.parseInt(jtCodigo.getText());
+            this.mat.eliminarMateria(idM);
+
+        } catch (NumberFormatException err) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar la materia no es valido el id", "ID Materia", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+
+    }//GEN-LAST:event_jbEliminarActionPerformed
+    public boolean verificarMateria(String nombreMateria) {
+        Pattern patronNombreMateria = Pattern.compile("^[a-zA-Z ]+[0-9]?$");
+        Matcher matcherNombreMateria = patronNombreMateria.matcher(nombreMateria);
+        return matcherNombreMateria.matches();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

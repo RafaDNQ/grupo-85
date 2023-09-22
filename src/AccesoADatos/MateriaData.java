@@ -82,8 +82,8 @@ public class MateriaData {
     public List<Materia> listarMaterias() {
         Materia materia = null;
         List<Materia> listaMaterias = new ArrayList<>();
-        String sql = "SELECT * FROM `materia` WHERE activo = 1";
-        try (PreparedStatement stp = con.prepareStatement(sql); ResultSet rs = stp.executeQuery();) {
+        String sql = "SELECT * FROM `materia` WHERE estado = 1";
+        try (PreparedStatement stp = con.prepareStatement(sql);ResultSet rs = stp.executeQuery();) {
             while (rs.next()) {
                 materia = new Materia();
                 materia.setIdMateria(rs.getInt("idMateria"));
