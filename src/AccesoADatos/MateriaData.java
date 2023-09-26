@@ -29,6 +29,10 @@ public class MateriaData {
     }
 
     //------------------------------------------------------------------------------------------------------------- 
+    /**
+     * guarda una materia en la base de datos
+     *@param materia recibe un objeto de tipo materia
+     */
     public void guardarMateria(Materia materia) {
 
         String sql = "INSERT INTO materia( nombre, anno, estado) VALUES ( ?, ?, ?)";
@@ -55,6 +59,11 @@ public class MateriaData {
     }
 
     //------------------------------------------------------------------------------------------------------------- 
+    /**
+     * recupera una materia segun el id
+     * @param id recibe un id 
+     * @return Materia-devuelve una materia caso contrario null
+     */
     public Materia buscarMateria(int id) {
         Materia materia = null;
         String sql = "SELECT * FROM materia where idMateria=? AND estado=1;";
@@ -78,7 +87,11 @@ public class MateriaData {
         return materia;
     }
     //----------------------------------------------------------------------------------
-    
+      /**
+     * recupera una materia segun el id
+     * @param id recibe un id 
+     * @return Materia-devuelve una materia caso contrario null
+     */
      public Materia buscarMateria2(int id) {
         Materia materia = null;
         String sql = "SELECT * FROM materia where idMateria=?;";
@@ -103,6 +116,10 @@ public class MateriaData {
     }
 
     //------------------------------------------------------------------------------------------------------------- 
+   /**
+    recupera de la base de datos una lista de materias
+     * @return devuelve una lista de tipo Materia
+    */
     public List<Materia> listarMaterias() {
         Materia materia = null;
         List<Materia> listaMaterias = new ArrayList<>();
@@ -125,6 +142,9 @@ public class MateriaData {
     }
 
     //------------------------------------------------------------------------------------------------------------- 
+    /**Si encuentra la materia la modifica no tiene en cuenta el estado
+     * @param materia
+     */
     public void modificarMateria(Materia materia) {
         String sql = "UPDATE materia SET nombre=?,anno=? WHERE idMateria=?";
         try (PreparedStatement stp = con.prepareStatement(sql);) {
@@ -144,6 +164,12 @@ public class MateriaData {
 
     }
     //-----------------------------------------------------------------------------------
+  
+    /**
+     *Modifica una materia pero tiene en cuenta su estado
+     * @param materia recibe un Objeto de tipo materia
+     */
+
     public void cambiarEstado(Materia materia){
      String sql = "UPDATE materia SET nombre=?,anno=?,estado=? WHERE idMateria=?";
         try (PreparedStatement stp = con.prepareStatement(sql);) {
@@ -171,7 +197,11 @@ public class MateriaData {
     }
     
 
-    //------------------------------------------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------------------------------------------
+    /**
+     *modifica la materia a estado = 0 
+     * @param id recibe el id de la materia
+     */
     public void eliminarMateria(int id) {
         String sql = "UPDATE materia SET estado = 0 WHERE idMateria = ?";
         try (PreparedStatement stp = con.prepareStatement(sql);) {
@@ -188,19 +218,8 @@ public class MateriaData {
             e.printStackTrace();
         } 
     }
+    //-------------------------------------------------------------------------------------------------------------
 
-    //------------------------------------------------------------------------------------------------------------- 
-    private void cerrarConexion(Connection con) {
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Error al cerror la conexion" + ex.getMessage(), "Error Conexion", JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
-            }
-        }
-
-    }
-    //------------------------------------------------------------------------------------------------------------- 
+  
 
 }

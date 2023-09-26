@@ -28,7 +28,7 @@ public class menuAP extends javax.swing.JFrame {
 
         jInternalFrame1 = new javax.swing.JInternalFrame();
         escritorio = new javax.swing.JDesktopPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        Salir = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -39,6 +39,7 @@ public class menuAP extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
 
         jInternalFrame1.setBackground(new java.awt.Color(0, 255, 51));
         jInternalFrame1.setVisible(true);
@@ -57,7 +58,6 @@ public class menuAP extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Universidad");
         setBackground(new java.awt.Color(0, 255, 51));
-        setPreferredSize(new java.awt.Dimension(600, 600));
 
         escritorio.setPreferredSize(new java.awt.Dimension(600, 600));
 
@@ -82,7 +82,7 @@ public class menuAP extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem1);
 
-        jMenuBar1.add(jMenu1);
+        Salir.add(jMenu1);
 
         jMenu2.setText("Materia");
 
@@ -94,7 +94,7 @@ public class menuAP extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu2);
+        Salir.add(jMenu2);
 
         jMenu3.setText("Administracion");
 
@@ -114,7 +114,7 @@ public class menuAP extends javax.swing.JFrame {
         });
         jMenu3.add(jMenuItem4);
 
-        jMenuBar1.add(jMenu3);
+        Salir.add(jMenu3);
 
         jMenu4.setText("Consultar");
         jMenu4.addActionListener(new java.awt.event.ActionListener() {
@@ -131,12 +131,21 @@ public class menuAP extends javax.swing.JFrame {
         });
         jMenu4.add(jMenuItem5);
 
-        jMenuBar1.add(jMenu4);
+        Salir.add(jMenu4);
 
-        jMenu5.setText("Salir");
-        jMenuBar1.add(jMenu5);
+        jMenu5.setText("Opciones");
 
-        setJMenuBar(jMenuBar1);
+        jMenuItem6.setText("Salir");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem6);
+
+        Salir.add(jMenu5);
+
+        setJMenuBar(Salir);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -220,6 +229,11 @@ public class menuAP extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenu4ActionPerformed
 
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -257,6 +271,7 @@ public class menuAP extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuBar Salir;
     private javax.swing.JDesktopPane escritorio;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JMenu jMenu1;
@@ -264,11 +279,11 @@ public class menuAP extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     // End of variables declaration//GEN-END:variables
 }

@@ -12,14 +12,11 @@ import AccesoADatos.AlumnoData;
 import AccesoADatos.InscripcionData;
 import Entidades.Alumno;
 import Entidades.Inscripcion;
-import Entidades.Materia;
 import static java.awt.image.ImageObserver.HEIGHT;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -32,80 +29,111 @@ import javax.swing.table.DefaultTableModel;
  */
 public class actualizarNotas extends javax.swing.JInternalFrame {
 
-    AlumnoData AG = new AlumnoData();
-    List<Alumno> LA;
+    AlumnoData alumnoData = new AlumnoData();
+    List<Alumno> listaAlumnos;
     DefaultTableModel modelo = new DefaultTableModel() {
         @Override
-        public boolean isCellEditable(int row,int column) {
+        public boolean isCellEditable(int row, int column) {
             // solamente la columna 2 sera editable
-            return column==2;
+            return column == 2;
         }
     };
     InscripcionData insdata = new InscripcionData();
-    private double notaNueva=0.0;
-    private double notaAnterior=0.0;
+    private double notaNueva = 0.0;
+    private double notaAnterior = 0.0;
 
     public actualizarNotas() {
         initComponents();
         CargarTabla();
-        
+
         try {
-            LA = new ArrayList<>(AG.listaralumnos());
+            listaAlumnos = new ArrayList<>(alumnoData.listaralumnos());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error de coneccion", "ERROR", HEIGHT);
+            JOptionPane.showMessageDialog(this, "Error de conexion", "ERROR", HEIGHT);
             ex.printStackTrace();
         }
         CargarAlumnos();
         borrar();
         jbModifica.setEnabled(false);
         jtTabla.setVisible(true);
-         jtTabla.getModel().addTableModelListener(new TableModelListener() {
-        @Override
-        public void tableChanged(TableModelEvent e) {
-            //notaAnterior=Double.parseDouble((String)jtTabla.getValueAt(jtTabla.getSelectedRow(),2));
+        jtTabla.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                //notaAnterior=Double.parseDouble((String)jtTabla.getValueAt(jtTabla.getSelectedRow(),2));
 
-            if (e.getType() == TableModelEvent.UPDATE) {
-                jbModifica.setEnabled(false);
-                int fila = e.getFirstRow();
-                int columna = e.getColumn();
-                Object celdaMOdificada = jtTabla.getValueAt(fila, columna);
-                try {
-                    System.out.println("evento ejecutado");
-                    if (columna == 2) {
-                        jbModifica.setEnabled(true);
-                        System.out.println("Celda modificada en fila " + fila + ", columna " + columna + ": " + celdaMOdificada);
-                        notaNueva =Double.parseDouble((String)celdaMOdificada);
-                        System.out.println("la nota nueva es "+notaNueva);
-                        System.out.println("nota anterior "+notaAnterior);
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    jbModifica.setEnabled(false);
+                    int fila = e.getFirstRow();
+                    int columna = e.getColumn();
+                    Object celdaMOdificada = jtTabla.getValueAt(fila, columna);
+                    try {
+                        System.out.println("evento ejecutado");
+                        if (columna == 2) {
+                            jbModifica.setEnabled(true);
+                            System.out.println("Celda modificada en fila " + fila + ", columna " + columna + ": " + celdaMOdificada);
+                            notaNueva = Double.parseDouble((String) celdaMOdificada);
+                            System.out.println("la nota nueva es " + notaNueva);
+                            System.out.println("nota anterior " + notaAnterior);
+                            if (!(notaNueva >= 0 && notaNueva <= 10)) {
+                                throw new ArithmeticException("la nota " + notaNueva + "debe estar entre 0 y 10");
+                            }
+                        }
+                    } catch (NumberFormatException err) {
+                        JOptionPane.showMessageDialog(null, "No ha introducido un numero", "Erorr no es un numero", JOptionPane.WARNING_MESSAGE);
+                        notaNueva = notaAnterior;
+                        refrecarTabla();
+                        jbModifica.setEnabled(false);
+                        //err.printStackTrace();
+                    } catch (ArithmeticException err) {
+                        JOptionPane.showMessageDialog(null, err.getMessage(), "Nota no permitida", JOptionPane.WARNING_MESSAGE);
+                        notaNueva = notaAnterior;
+                        refrecarTabla();
+                        jbModifica.setEnabled(false);
+
+                    } catch (Exception err) {
+                        JOptionPane.showMessageDialog(null, "Ups a ocurrido un error inesperado contacte un administrador " + err.getMessage(), "Error inesperado", JOptionPane.ERROR_MESSAGE);
                     }
-                } catch (NumberFormatException err) {
-                    err.printStackTrace();
                 }
             }
-        }
-    });
-         
-         
-       jtTabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        });
+
+        jtTabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-              if(!e.getValueIsAdjusting()){
-                  int fila=jtTabla.getSelectedRow();
-                  if(fila!=-1 ){
-                      notaAnterior=(Double)jtTabla.getValueAt(fila, 2);
-                      System.out.println(notaAnterior);
-                      
-                  }
-                 
-              }
+                if (!e.getValueIsAdjusting()) {
+                    int fila = jtTabla.getSelectedRow();
+                    if (fila != -1) {
+                        try {
+                            Object objCelda = jtTabla.getValueAt(fila, 2);
+                            if (objCelda instanceof Double) {
+                                System.out.println("la nota anterior es" + notaAnterior);
+                                notaAnterior = (Double) objCelda;
+                                System.out.println(notaAnterior);
+                            } else {
+                                getToolkit().beep();
+                                notaAnterior = 0.0;
+                                refrecarTabla();
+                                jbModifica.setEnabled(false);
+
+                            }
+                        } catch (ClassCastException err) {
+                            JOptionPane.showMessageDialog(null, "Error de casteo" + err.getMessage(), "Error casteo", JOptionPane.ERROR_MESSAGE);
+
+                        } catch (Exception err) {
+                            JOptionPane.showMessageDialog(null, "Ups a ocurrido un error inesperado contacte un administrador " + err.getMessage(), "Error inesperado", JOptionPane.ERROR_MESSAGE);
+
+                        }
+
+                    }
+
+                }
             }
-       });
-         
-         
+        });
+
     }
 
     private void CargarAlumnos() {
-        for (Alumno a : LA) {
+        for (Alumno a : listaAlumnos) {
             jcCombo.addItem(a);
         }
     }
@@ -245,56 +273,23 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
 
     private void jbModificaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificaActionPerformed
         // guardar
-        int filaMateria=jtTabla.getSelectedRow();
+        int filaMateria = jtTabla.getSelectedRow();
         int idALumno = ((Alumno) jcCombo.getSelectedItem()).getIdAlumno();
-        if(filaMateria!=-1){
-            int idMateria=(Integer)jtTabla.getValueAt(filaMateria,0);
+        if (filaMateria != -1) {
+            int idMateria = (Integer) jtTabla.getValueAt(filaMateria, 0);
             System.out.println(idMateria);
-            insdata.actualizarNota(idALumno,idMateria,notaNueva);
+            insdata.actualizarNota(idALumno, idMateria, notaNueva);
             refrecarTabla();
             jbModifica.setEnabled(false);
             jtTabla.clearSelection();
-            
+
         }
-        
-        
 
         /*Object getSource() (in java.util.EventObject)	Return the object that fired the event.
          int getFirstRow (Return the index of the first row that changed. TableModelEvent.HEADER_ROW specifies the table header.
          int getLastRow() The last row that changed. Again, HEADER_ROW is a possible value.
          int getColumn() Return the index of the column that changed. The constant TableModelEvent.ALL_COLUMNS specifies that all the columns might have changed.
          int getType() What happened to the changed cells. The returned value is one of the following: TableModelEvent.INSERT, TableModelEvent.DELETE, or TableModelEvent.UPDATE*/
-        
-        
-        
-        
-//        jtTabla.getModel().addTableModelListener(new TableModelListener(){
-//            @Override
-//            public void tableChanged(TableModelEvent e) {
-//                    if (e.getType() == TableModelEvent.UPDATE) {
-//                        int fila = e.getFirstRow();
-//                        int columna = e.getColumn();
-//                        Object celdaMOdificada = jtTabla.getValueAt(fila, columna);
-//                        try{
-//                        
-//                             if(notaNueva!=(Double)celdaMOdificada){
-//                             System.out.println("Celda modificada en fila " + fila+ ", columna " + columna + ": " + celdaMOdificada);
-//                             notaNueva=(Double)celdaMOdificada;
-//                           
-//                        }
-//                        }catch(NumberFormatException err){
-//                            err.printStackTrace();
-//                            
-//                        }
-//                       
-//                       
-//                    }
-//                }
-//       
-//    });
-        
-        
-        
 
     }//GEN-LAST:event_jbModificaActionPerformed
 
@@ -305,10 +300,10 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
 
     private void jpanelCargarNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanelCargarNotasMouseClicked
         // TODO add your handling code here:
-        if(evt.getSource()==jpanelCargarNotas){
+        if (evt.getSource() == jpanelCargarNotas) {
             jtTabla.clearSelection();
             jbModifica.setEnabled(false);
-            notaNueva=notaAnterior;
+            notaNueva = notaAnterior;
             refrecarTabla();
             System.out.println("deseleccionado !");
         }
@@ -345,6 +340,5 @@ private void borrar() {
             });
         }
     }
-
 
 }

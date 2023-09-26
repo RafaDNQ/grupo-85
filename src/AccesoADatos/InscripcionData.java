@@ -10,8 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class InscripcionData {
@@ -28,7 +26,12 @@ public class InscripcionData {
         matData = new MateriaData();
     }
 
-    //-------------------------------------------------------------------------------------------------------------      
+    //------------------------------------------------------------------------------------------------------------- 
+    /**
+     guarda una inscripcion en la base de datos
+     * @param insc Objeto de tipo inscripcion 
+     */
+        
     public void guardarInscripcion(Inscripcion insc) {
         String sql = "INSERT INTO inscripcion( nota, idAlumno, idMateria)"
                 + " VALUES (?,?,?)";
@@ -53,7 +56,11 @@ public class InscripcionData {
 
     }
 
-    //-------------------------------------------------------------------------------------------------------------      
+    //------------------------------------------------------------------------------------------------------------- 
+    /**
+     * recupera una lista de todas las inscriciones de la base de datos
+     *@return devuelve una lista de tipo Inscripcion caso contrario null
+     */
     public List<Inscripcion> obtenerInscripciones() {
         Inscripcion insc = null;
         List<Inscripcion> listaInscripciones = new ArrayList<>();
@@ -77,7 +84,12 @@ public class InscripcionData {
         return listaInscripciones;
     }
 
-    //-------------------------------------------------------------------------------------------------------------      
+    //------------------------------------------------------------------------------------------------------------- 
+    /**
+     *recupera una lista de inscripciones de un Alumno en particular segun su id
+     * @param idAlumno recibe un id de un alumno
+     * @return  devuelve una lista de tipo Inscripcion
+     */
     public List<Inscripcion> obtenerInscripcionesPorAlumno(int idAlumno) {
 
         
@@ -105,7 +117,12 @@ public class InscripcionData {
         return listaInscripciones;
     }
 
-    //-------------------------------------------------------------------------------------------------------------      
+    //------------------------------------------------------------------------------------------------------------- 
+    /**
+     *Obtiene una lista de materias que cursa el alumno en base a su id
+     * @param idAlumno recibe un id de tipo int del alumno
+     * @return devuelve una lista de tipo Materia 
+     */
     public List<Materia> obtenerMateriasCursadas(int idAlumno) {
         List<Materia> materiasCursadas = new ArrayList<>();
         Materia mat = null;
@@ -131,7 +148,12 @@ public class InscripcionData {
         return materiasCursadas;
     }
 
-    //-------------------------------------------------------------------------------------------------------------   
+    //-------------------------------------------------------------------------------------------------------------
+    /**
+     * Obtiene una lista de materias no cursadas por el alumno
+     * @param idAlumno recibe el id de un alumno
+     * @return devuelve una lista de tipo Materia 
+     */
     public List<Materia> obtenerMateriasNOCursadas(int idAlumno) {
         List<Materia> listaMateriasNOCursadas = new ArrayList<>();
         Materia mat = null;
@@ -162,7 +184,12 @@ public class InscripcionData {
         return listaMateriasNOCursadas;
     }
 
-    //-------------------------------------------------------------------------------------------------------------     
+    //-------------------------------------------------------------------------------------------------------------  
+    /**
+     *borra la inscripcion del alumno en base al id del Alumno y el de la Materia
+     * @param idAlumno recibe el id del Alumno
+     * @param idMateria recibe el id de la Matmeria
+     */
     public void borrarInscripcionMateriaAlumno(int idAlumno, int idMateria) {
         String sql = "DELETE FROM `inscripcion` WHERE idAlumno = ? AND idMateria = ?;";
          try (PreparedStatement stp = con.prepareStatement(sql);) {
@@ -184,7 +211,14 @@ public class InscripcionData {
 
     }
 
-//-------------------------------------------------------------------------------------------------------------     
+//------------------------------------------------------------------------------------------------------------- 
+    /**
+     * Actualiza la nota de un alumno
+     * @param idAlumno recibe el id del Alumno
+     * @param idMateria recibe el id de la Materia
+     * @param nota recibe la nota a actualizar
+     */
+       
     public void actualizarNota(int idAlumno, int idMateria, double nota) {
 
         String sql = "UPDATE `inscripcion` SET `nota`= ? WHERE idAlumno = ? AND idMateria = ?;";
@@ -205,7 +239,12 @@ public class InscripcionData {
 
     }
 
-//-------------------------------------------------------------------------------------------------------------     
+//-------------------------------------------------------------------------------------------------------------   
+    /**
+     * Obtiene una lista de alumnos por Materia
+     * @param idMateria recibe el id de la Materia
+     * @return devuelve una lista de tipo Alumno 
+     */
     public List<Alumno> obtenerAlumnoXMateriaMateria(int idMateria) {
         List<Alumno> listaAlumnoXMateriaMateria = new ArrayList<>();
         Alumno alu = null;
@@ -235,17 +274,6 @@ public class InscripcionData {
         return listaAlumnoXMateriaMateria;
     }
 
-//------------------------------------------------------------------------------------------------------------- 
-    private void cerrarConexion(Connection con) {
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Error al cerror la conexion" + ex.getMessage(), "Error Conexion", JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
-            } 
-        }
 
-    }
 
 }
