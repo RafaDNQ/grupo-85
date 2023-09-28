@@ -198,8 +198,8 @@ public class actualizarNotas extends javax.swing.JInternalFrame {
         ));
         jtTabla.setCellSelectionEnabled(true);
         jtTabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jtTabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jtTabla);
+        jtTabla.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Cargar Notas");

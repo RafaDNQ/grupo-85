@@ -113,7 +113,7 @@ public class AlumnoData {
 
                 //JOptionPane.showMessageDialog(null, "Alumno Encontrado");
             } else {
-                JOptionPane.showMessageDialog(null, "No existe ese Alumno");
+                //JOptionPane.showMessageDialog(null, "No existe ese Alumno");
             }
 
         } catch (SQLException ex) {
@@ -215,7 +215,7 @@ public class AlumnoData {
 
             int exito = ps.executeUpdate();
             if (exito == 1) {
-                JOptionPane.showMessageDialog(null, "Alumno eliminado :V ");
+                //JOptionPane.showMessageDialog(null, "Alumno eliminado :V ");
             }
 
         } catch (SQLException ex) {

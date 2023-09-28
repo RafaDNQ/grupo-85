@@ -306,6 +306,8 @@ public class gestionMaterias extends javax.swing.JInternalFrame {
         try {
             int idM = Integer.parseInt(jtCodigo.getText());
             this.mat.eliminarMateria(idM);
+            jbModificar.setEnabled(false);
+            jbEliminar.setEnabled(false);
 
         } catch (NumberFormatException err) {
             JOptionPane.showMessageDialog(this, "Error al eliminar la materia no es valido el id", "ID Materia", JOptionPane.ERROR_MESSAGE);

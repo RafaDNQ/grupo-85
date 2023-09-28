@@ -212,7 +212,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
 
             Alumno alum2 = new Alumno(dni, apellido, nombre, fecha, estado);
             alum.guardarAlumno(alum2);
-            JOptionPane.showMessageDialog(null, "Alumno Guardado :)");
+            JOptionPane.showMessageDialog(null, "Alumno Guardado","Base de datos",JOptionPane.INFORMATION_MESSAGE);
 
         } catch (NumberFormatException err) {
             JOptionPane.showMessageDialog(this, "El campo DNI debe ser un numero y no puede estar vacio ", "DNI invalido", JOptionPane.WARNING_MESSAGE);
@@ -236,7 +236,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
                 jtApellido.setText(alumG.getApellido());
                 jtNombre.setText(alumG.getNombre());
                 jdFecha.setDate(Date.valueOf(alumG.getFechaDeNacimiento()));
-                JOptionPane.showMessageDialog(null, "Alumno Guardado :V");
+                JOptionPane.showMessageDialog(null, "Alumno encontrado","Base de datos",JOptionPane.INFORMATION_MESSAGE);
 
                 if (alumG.isEstado()) {
                     jrBotonActivo.setSelected(true);
@@ -304,6 +304,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
         try {
             String nombre = jtNombre.getText();
             String apellido = jtApellido.getText();
+            boolean estado=false;
             int dni = Integer.parseInt(jtDocumento.getText());
             boolean condicion = nombre.isEmpty() || apellido.isEmpty() || !verificarNombre(nombre)
                     || !verificarNombre(apellido);
@@ -319,8 +320,18 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
             if (!comprobarFecha(fecha)) {
                 throw new DateTimeException("La fecha " + fecha + " introducida no es valida");
             }
-            boolean estado = false;
-            estado = jrBotonActivo.isSelected();
+            
+            if(!jrBotonActivo.isSelected()){
+                estado=false;
+            }else{
+                estado=true;
+            }
+            System.out.println("el estado del boton es "+estado);
+//            if (jrBotonActivo.isSelected()) {
+//                estado = true;
+//            } else {
+//                estado = false;
+//            }
             al.setIdAlumno(alum.buscarAlumnoDNI(dni).getIdAlumno());
             al.setDni(dni);
             al.setApellido(apellido);
@@ -343,7 +354,7 @@ public class gestionAlumno extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jbModificarActionPerformed
     private boolean verificarNombre(String nombre) {
-        Pattern patronNombre = Pattern.compile("^[a-zA-Z]+$");
+        Pattern patronNombre = Pattern.compile("^[a-zA-Z ]+$");
         Matcher matcher = patronNombre.matcher(nombre);
         return matcher.matches();
     }
